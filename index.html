@@ -1,0 +1,314 @@
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>body{margin:0;font-size:14px}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>پرونده ویژه بچه‌های کلاس</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: a case-file wall. Matrix rain and drifting emoji move behind a hero, a news ticker of names, and twelve dossier cards whose "roast" stays blurred until you hit the button. */
+  :root {
+    --bg: #060a07;
+    --card: rgba(9, 15, 11, .93);
+    --line: #1d2e22;
+    --fg: #e6f3ea;
+    --muted: #8aa595;
+    --green: #37e07c;
+    --green-dim: #1c6b3d;
+    --red: #ff5257;
+    --red-dim: #6b2326;
+    --font-display: "Lalezar", "Vazirmatn", Tahoma, sans-serif;
+    --font-body: "Vazirmatn", Tahoma, "Segoe UI", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 16px 48px;
+  }
+
+  /* Animated backdrop */
+  #rain { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: .42; }
+  .floaters { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .floaters span { position: absolute; bottom: -12%; opacity: .55; animation: rise linear infinite; will-change: transform; }
+  @keyframes rise {
+    from { transform: translateY(0) rotate(-12deg); }
+    to { transform: translateY(-125vh) rotate(24deg); }
+  }
+
+  .app { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; line-height: 1.7; font-size: 1rem; }
+  :focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+
+  /* Hero */
+  .hero { padding-block: 28px 20px; }
+  .prompt { direction: ltr; text-align: right; margin: 0; font-family: var(--font-mono); font-size: .875rem; color: var(--muted); text-shadow: 0 0 8px var(--bg); }
+  .prompt .g { color: var(--green); }
+  .prompt .r { color: var(--red); }
+  h1 {
+    margin: 8px 0 0; font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(2.8rem, 11vw, 6rem); line-height: 1.2; text-wrap: balance;
+    text-shadow: 0 0 24px var(--bg), 0 0 6px var(--bg);
+  }
+  h1 .hl { color: var(--green); display: inline-block; animation: glitch 6s steps(1) infinite; }
+  @keyframes glitch {
+    0%, 92%, 100% { text-shadow: 0 0 24px var(--bg); transform: none; }
+    93% { text-shadow: 3px 0 var(--red), -3px 0 var(--fg); transform: translateX(2px); }
+    95% { text-shadow: -3px 0 var(--red), 3px 0 var(--fg); transform: translateX(-2px); }
+    97% { text-shadow: 2px 1px var(--red), -2px -1px var(--green); transform: none; }
+  }
+  .lead { margin: 10px 0 0; max-width: 56ch; font-size: 1.25rem; font-weight: 500; text-shadow: 0 0 10px var(--bg), 0 0 4px var(--bg); }
+
+  /* Ticker */
+  .ticker { direction: ltr; margin-block: 22px 6px; overflow: hidden; border-block: 1px solid var(--red-dim); background: rgba(9, 15, 11, .85); }
+  .ticker-track { display: flex; width: max-content; animation: scroll 38s linear infinite; }
+  .ticker-track span { padding: 6px 22px; white-space: nowrap; font-size: .9375rem; color: var(--fg); }
+  .ticker-track span b { color: var(--red); font-family: var(--font-mono); font-weight: 500; margin-inline-end: 10px; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+
+  /* Controls */
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; padding-block: 18px 6px; }
+  .status { flex: 1 1 260px; min-width: 0; margin: 0; font-weight: 500; text-shadow: 0 0 8px var(--bg); }
+  .status em { font-style: normal; color: var(--red); font-weight: 700; }
+  .btn {
+    font: inherit; font-weight: 700; font-size: .9375rem; cursor: pointer;
+    border-radius: 4px; padding: 7px 16px; border: 1px solid var(--green); background: var(--green); color: var(--bg);
+    transition: transform .12s, background .15s;
+  }
+  .btn:hover { background: var(--fg); border-color: var(--fg); transform: translateY(-1px); }
+  .btn.alt { background: rgba(9, 15, 11, .85); color: var(--fg); border-color: var(--line); }
+  .btn.alt:hover { border-color: var(--green); color: var(--green); }
+  .btn.hot { background: var(--red); border-color: var(--red); color: var(--bg); }
+  .btn.hot:hover { background: var(--fg); border-color: var(--fg); }
+
+  /* Cards */
+  .grid { display: grid; gap: 22px 18px; padding-block: 14px 8px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .file {
+    min-width: 0; display: flex; flex-direction: column;
+    background: var(--card); border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+    transform: rotate(var(--tilt, 0deg)); transition: transform .2s, border-color .2s;
+  }
+  .file:hover { transform: rotate(0deg) translateY(-3px); border-color: var(--green-dim); }
+  .file.pulse { animation: pulse 1.2s ease 1; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255, 82, 87, 0); }
+    30% { box-shadow: 0 0 0 6px rgba(255, 82, 87, .55); }
+  }
+  .file-bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+  .case { font-family: var(--font-mono); font-size: .75rem; color: var(--muted); direction: ltr; }
+  .stamp {
+    font-size: .75rem; font-weight: 700; color: var(--red); border: 1.5px solid var(--red); border-radius: 3px;
+    padding: 0 8px; transform: rotate(-4deg); letter-spacing: .02em;
+  }
+  .file-head { display: flex; align-items: center; gap: 14px; padding: 14px 14px 4px; min-width: 0; }
+  .av { flex: none; width: 64px; height: 64px; padding: 8px; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; }
+  .av svg { display: block; width: 100%; height: 100%; }
+  .av svg rect { fill: var(--green); }
+  .av svg rect.r { fill: var(--red); }
+  .file h2 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.8rem; line-height: 1.3; overflow-wrap: anywhere; }
+  .sec { margin: 10px 14px 0; padding: 10px 12px 12px; border-radius: 4px; border: 1px solid var(--line); min-width: 0; }
+  .sec:last-child { margin-bottom: 14px; }
+  .lab { display: block; font-size: .8125rem; font-weight: 700; margin-bottom: 2px; }
+  .sec p { margin: 0; font-size: 1rem; overflow-wrap: anywhere; }
+  .good { border-color: var(--green-dim); }
+  .good .lab { color: var(--green); }
+  .bad { border-color: var(--red-dim); position: relative; }
+  .bad .lab { color: var(--red); }
+  .roast-text { transition: filter .35s; }
+  .bad:not(.open) .roast-text { filter: blur(7px); user-select: none; }
+  .bad.open { animation: shake .45s 1; }
+  @keyframes shake {
+    20% { transform: translateX(-4px) rotate(-.6deg); }
+    40% { transform: translateX(4px) rotate(.6deg); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+  }
+  .reveal {
+    position: absolute; inset: 0; width: 100%; font: inherit; font-weight: 700; font-size: .9375rem;
+    color: var(--fg); background: rgba(9, 15, 11, .35); border: 0; cursor: pointer; border-radius: 4px;
+  }
+  .reveal:hover { color: var(--red); background: rgba(255, 82, 87, .08); }
+  .pending { color: var(--muted); }
+  .pending i { font-style: normal; animation: dot 1.4s steps(1) infinite; }
+  .pending i:nth-child(2) { animation-delay: .25s; }
+  .pending i:nth-child(3) { animation-delay: .5s; }
+  @keyframes dot { 0%, 40% { opacity: .15; } 50%, 100% { opacity: 1; } }
+
+  footer {
+    margin-top: 40px; padding: 14px 0 0; border-top: 1px solid var(--line);
+    font-size: .875rem; color: var(--muted); text-shadow: 0 0 8px var(--bg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floaters, .ticker-track, h1 .hl, .pending i, .file.pulse, .bad.open { animation: none; }
+    .floaters { display: none; }
+    .file, .btn { transition: none; }
+  }
+</style>
+
+</head><body>
+<canvas id="rain" aria-hidden="true"></canvas>
+<div class="floaters" id="floaters" aria-hidden="true"></div>
+
+<div class="app" dir="rtl" lang="fa">
+  <header class="hero">
+    <p class="prompt"><span class="g">$</span> open --files <span class="r">--roast=on</span></p>
+    <h1>پرونده ویژه <span class="hl">بچه‌های کلاس</span></h1>
+    <p class="lead">۱۴ نفر، ۱۴ شخصیت متفاوت، ۱۴ سوژه برای خنده! 🤣🔥</p>
+  </header>
+
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
+
+  <section class="controls" aria-label="کنترل پرونده‌ها">
+    <p class="status" id="status" aria-live="polite"></p>
+    <button class="btn" type="button" id="rand">یه نفر رو شانسی بیار</button>
+    <button class="btn hot" type="button" id="all">تخریب همه</button>
+    <button class="btn alt" type="button" id="reset">برگردون</button>
+  </section>
+
+  <main class="grid" id="grid"></main>
+
+  <footer>همه‌ش شوخیه و فقط بین رفقا. هر کس بدش اومد، بگه تا پرونده‌اش رو ببندیم.</footer>
+</div>
+
+<script>
+  document.documentElement.dir = "rtl";
+  document.documentElement.lang = "fa";
+
+  const FILES = [
+    { name: "میری", good: "پسری باهوش، بااعتمادبه‌نفس و پرانرژی که همیشه حرفی برای گفتن دارد.", bad: "انقدر دیوونه‌بازی درمیاره که آدم شک می‌کنه زنگ تفریح تموم شده یا سیرک هنوز ادامه داره!" },
+    { name: "حکمتی‌نیا", good: "کوچولوی کلاس که هنوز جای پیشرفت زیادی داره.", bad: "اعتمادبه‌نفسش از نمره‌هاش کمتره؛ کتاب درسی هم با دیدنش احساس تنهایی می‌کنه!" },
+    { name: "نمازخوان", good: "نور کلاس، معروف به سفیدی و البته توپولیِ دوست‌داشتنی!", bad: "پولدار بودنش به کنار، با درس و فوتبال انگار قرارداد عدم همکاری بسته!" },
+    { name: "ملکوتی", good: "", bad: "از هر نظر دنبال نقطه قوته، ولی انگار نقطه‌هاش هنوز پیدا نشدن! 🤣" },
+    { name: "دنیا", good: "پسری با ظرفیت‌های فراوان که هنوز همه‌شون کشف نشدن!", bad: "انگار فقط یک‌چهارم مغزش فعاله؛ بقیه‌ش رفتن مرخصی بدون حقوق!" },
+    { name: "مهدی جبله", good: "فوتبالیست قهار و نابغه ریاضی کلاس!", bad: "تنها کسیه که می‌تونه هم‌زمان تو خواب، رؤیای گل‌زنی ببینه و معادله حل کنه!" },
+    { name: "امین جغتایی", good: "همیشه آماده پذیرایی و استفاده از فرصت‌های غذایی کلاس!", bad: "اگه ساندویچی گم شد، قبل از اعلام مفقودی باید از امین بازجویی کرد! 🥪" },
+    { name: "حسن صمدی", good: "علاقه‌مند به روابط اجتماعی و آشنایی با آدم‌های جدید!", bad: "انگار مدرسه رو با آژانس همسریابی اشتباه گرفته؛ درس خوندن براش شده فعالیت جانبی!" },
+    { name: "عباس فریمانه", good: "پسری که با وجود سختی‌های درس، هنوز علاقه‌اش رو به یادگیری از دست نداده.", bad: "مغزش موقع امتحان انگار روی حالت ذخیره انرژی می‌ره!" },
+    { name: "نوباغی", good: "آروم‌ترین و کم‌حرف‌ترین عضو کلاس؛ هیچ‌وقت دنبال حاشیه نیست.", bad: "انقدر ساکته که اگه یک روز سه جمله پشت سر هم بگه، باید اون روز رو تعطیل رسمی اعلام کرد!" },
+    { name: "بهاری", good: "توپولوی کلاس با استعداد عجیب در پیدا کردن وسایل دیگران!", bad: "ساندویچ، دستبند، گردنبند؛ فقط مونده زنگ مدرسه رو هم برای خودش برداره! 😂" },
+    { name: "مصطفی نسب", good: "دانش‌آموزی خاص که حضورش در کلاس همیشه اتفاق ویژه‌ای محسوب می‌شه!", bad: "هفته‌ای یک بار میاد مدرسه؛ انگار معلم باید برای دیدنش از قبل وقت ملاقات بگیره!" },
+    { name: "ابوالفضل حطیطه 💀", good: "", bad: "🤡 نکته مثبتش هنوز در دست بررسیه؛ نکات منفیش اون‌قدر زیاده که برای شمردنش ماشین‌حساب کم میار" },
+    { name: "مهدی حسین‌پور (عموجانی) 🧑‍🦲", good: "💀 خوشتیپ کلاس، ولی موهاش قبل از خودش تصمیم گرفتن کلاس رو ترک کنن! 😂", bad: "🤣 انقدر به خوشتیپی اهمیت می‌ده که انگار موهاش رو قربانی شیک‌پوشی کرده! 🧑‍🦲🔥" }
+  ];
+
+  const $ = id => document.getElementById(id);
+  const fa = n => Number(n).toLocaleString("fa-IR");
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Pixel avatar: mirrored 5x5 grid, green cells plus one red cell. */
+  function avatar(i) {
+    let seed = (i + 5) * 7919, rects = "";
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    for (let y = 0; y < 5; y++) {
+      for (let x = 0; x < 3; x++) {
+        if (!((x === 2 && y === 2) || rnd() > 0.45)) continue;
+        rects += `<rect x="${x}" y="${y}" width="1" height="1"/>`;
+        if (x < 2) rects += `<rect x="${4 - x}" y="${y}" width="1" height="1"/>`;
+      }
+    }
+    rects += `<rect class="r" x="2" y="${1 + (i % 3)}" width="1" height="1"/>`;
+    return `<span class="av"><svg viewBox="0 0 5 5" shape-rendering="crispEdges" aria-hidden="true">${rects}</svg></span>`;
+  }
+
+  /* Cards */
+  const tilts = [-0.7, 0.5, -0.4, 0.7, -0.5, 0.4];
+  $("grid").innerHTML = FILES.map((f, i) => `
+    <article class="file" id="f${i}" style="--tilt:${tilts[i % tilts.length]}deg">
+      <div class="file-bar"><span class="case">CASE_${String(i + 1).padStart(2, "0")}</span><span class="stamp">فوق‌محرمانه</span></div>
+      <div class="file-head">${avatar(i)}<h2>${esc(f.name)}</h2></div>
+      <div class="sec good"><span class="lab">⭐ تعریف</span>${f.good
+        ? `<p>${esc(f.good)}</p>`
+        : `<p class="pending">هنوز پیدا نشده، در حال بررسی<i>.</i><i>.</i><i>.</i></p>`}</div>
+      <div class="sec bad" data-i="${i}"><span class="lab">😂 تخریب</span><p class="roast-text">${esc(f.bad)}</p>
+        <button class="reveal" type="button" data-i="${i}" aria-label="تخریب ${esc(f.name)}">تخریبش کن 🔥</button></div>
+    </article>`).join("");
+
+  /* Ticker */
+  const line = FILES.map((f, i) => `<span><b>#${String(i + 1).padStart(2, "0")}</b>${esc(f.name)}</span>`).join("");
+  $("tickerTrack").innerHTML = line + line;
+
+  /* Reveal logic */
+  const opened = new Set();
+  function setOpen(i, on) {
+    const sec = document.querySelector(`.bad[data-i="${i}"]`);
+    if (!sec) return;
+    sec.classList.toggle("open", on);
+    sec.querySelector(".reveal").hidden = on;
+    on ? opened.add(i) : opened.delete(i);
+  }
+  function updateStatus() {
+    const n = opened.size, t = FILES.length;
+    $("status").innerHTML = n === t
+      ? `<em>همه تخریب شدن.</em> کسی سالم نموند! 😂`
+      : n === 0 ? `هنوز کسی تخریب نشده. شروع کن!` : `<em>${fa(n)}</em> از ${fa(t)} پرونده تخریب شد.`;
+  }
+  $("grid").addEventListener("click", e => {
+    const b = e.target.closest(".reveal"); if (!b) return;
+    setOpen(Number(b.dataset.i), true); updateStatus();
+  });
+  $("all").addEventListener("click", () => { FILES.forEach((_, i) => setOpen(i, true)); updateStatus(); });
+  $("reset").addEventListener("click", () => { FILES.forEach((_, i) => setOpen(i, false)); updateStatus(); });
+  $("rand").addEventListener("click", () => {
+    const left = FILES.map((_, i) => i).filter(i => !opened.has(i));
+    const pool = left.length ? left : FILES.map((_, i) => i);
+    const i = pool[Math.floor(Math.random() * pool.length)];
+    const card = $("f" + i);
+    card.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+    card.classList.remove("pulse"); void card.offsetWidth; card.classList.add("pulse");
+    setTimeout(() => { setOpen(i, true); updateStatus(); }, reduce ? 0 : 500);
+  });
+  updateStatus();
+
+  /* Floating emoji */
+  (function () {
+    const set = ["🤣", "🔥", "🥪", "😂", "💀", "📚", "⚽", "🤡", "💻", "🧠"];
+    $("floaters").innerHTML = set.map((e, i) => {
+      const dur = 16 + (i * 7) % 14;
+      return `<span style="left:${(i * 97 + 6) % 94}%;font-size:${22 + (i * 11) % 22}px;animation-duration:${dur}s;animation-delay:-${(i * 5) % dur}s">${e}</span>`;
+    }).join("");
+  })();
+
+  /* Matrix rain */
+  (function () {
+    const cv = $("rain"), ctx = cv.getContext("2d");
+    const CH = "01ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz{}<>/;=()[]$#".split("");
+    const fs = 16, bg = "6,10,7";
+    let W = 0, H = 0, drops = [], last = 0, raf = 0;
+
+    function size() {
+      const r = window.devicePixelRatio || 1;
+      W = window.innerWidth; H = window.innerHeight;
+      cv.width = W * r; cv.height = H * r;
+      ctx.setTransform(r, 0, 0, r, 0, 0);
+      ctx.fillStyle = `rgb(${bg})`; ctx.fillRect(0, 0, W, H);
+      drops = Array.from({ length: Math.ceil(W / fs) }, () => -Math.floor(Math.random() * 40));
+      ctx.font = `${fs}px "JetBrains Mono", "Vazirmatn", monospace`;
+    }
+    function draw() {
+      ctx.fillStyle = `rgba(${bg},.1)`; ctx.fillRect(0, 0, W, H);
+      for (let i = 0; i < drops.length; i++) {
+        const ch = CH[Math.floor(Math.random() * CH.length)];
+        ctx.fillStyle = Math.random() < 0.05 ? "#ff5257" : "#37e07c";
+        ctx.fillText(ch, i * fs, drops[i] * fs);
+        if (drops[i] * fs > H && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    function loop(t) {
+      raf = requestAnimationFrame(loop);
+      if (t - last < 55) return;
+      last = t; draw();
+    }
+    size();
+    window.addEventListener("resize", () => { size(); if (reduce) for (let k = 0; k < 70; k++) draw(); });
+    if (reduce) { for (let k = 0; k < 70; k++) draw(); }
+    else raf = requestAnimationFrame(loop);
+  })();
+</script>
+</body></html>
